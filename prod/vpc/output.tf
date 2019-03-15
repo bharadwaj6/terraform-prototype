@@ -21,6 +21,14 @@ output "private_rds_subnet_id" {
   value = "${aws_subnet.private_rds_subnet.id}"
 }
 
-# output "public_subnet_ssh_sg_id" {
-#   value = "${aws_security_group.public_subnet_ssh_sg.id}"
-# }
+output "public_subnet_ssh_sg_id" {
+  value = "${aws_security_group.public_subnet_ssh_sg.id}"
+}
+
+output "public_subnet_app_sg_id" {
+  value = "${aws_security_group.public_subnet_http_app_sg.id}"
+}
+
+output "public_subnet_meta_sg_id" {
+  value = "${aws_security_group.public_subnet_http_meta_sg.id}"
+}
