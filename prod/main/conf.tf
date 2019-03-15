@@ -2,13 +2,9 @@ variable "access_name" {}
 variable "access_key" {}
 variable "region" {}
 
-variable "availability_zone" {
-  default = "ap-south-1a"
-}
+variable "availability_zone" {}
 
-variable "instance_type" {
-  default = "t2.micro"
-}
+variable "instance_type" {}
 
 
 provider "aws" {
