@@ -34,4 +34,3 @@ variable "nat_amis" {
       "ap-south-1" = "ami-00b3aa8a93dd09c13"
   }
 }
-

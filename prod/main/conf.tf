@@ -10,6 +10,7 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
+
 provider "aws" {
   access_key = "${var.access_name}"
   secret_key = "${var.access_key}"
