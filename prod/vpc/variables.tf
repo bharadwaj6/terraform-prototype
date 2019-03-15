@@ -13,18 +13,33 @@ variable "vpc_cidr" {
 }
 
 variable "public_ssh_subnet_cidr" {
-    description = "CIDR for the Public Subnet"
-    default = "10.0.0.0/18"
+    description = "CIDR for the Public Subnet for SSH"
+    default = "10.0.0.0/19"
 }
 
-variable "public_http_subnet_cidr" {
-    description = "CIDR for the Public Subnet"
+variable "public_http_meta_subnet_cidr" {
+    description = "CIDR for the Public Subnet for meta server"
+    default = "10.0.32.0/19"
+}
+
+variable "public_http_app_subnet_cidr" {
+    description = "CIDR for the Public Subnet for App ELBs"
     default = "10.0.64.0/18"
 }
 
-variable "private_subnet_cidr" {
-    description = "CIDR for the Private Subnet"
-    default = "10.0.128.0/17"
+variable "private_rds_subnet_cidr" {
+    description = "CIDR for the Private Subnet for app db servers"
+    default = "10.0.128.0/19"
+}
+
+variable "private_meta_rds_subnet_cidr" {
+    description = "CIDR for the Private Subnet for Meta db servers"
+    default = "10.0.160.0/19"
+}
+
+variable "private_app_subnet_cidr" {
+    description = "CIDR for the Private Subnet with App servers"
+    default = "10.0.192.0/18"
 }
 
 variable "nat_amis" {

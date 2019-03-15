@@ -11,16 +11,27 @@ resource "aws_internet_gateway" "default" {
 }
 
 /*
-  Public Subnet
+  Public Subnets
 */
-resource "aws_subnet" "public_subnet_http" {
+resource "aws_subnet" "public_subnet_http_app" {
     vpc_id = "${aws_vpc.default.id}"
 
-    cidr_block = "${var.public_http_subnet_cidr}"
+    cidr_block = "${var.public_http_app_subnet_cidr}"
     availability_zone = "${var.availability_zone}"
 
     tags {
-        Name = "Public Subnet HTTP"
+        Name = "Public Subnet HTTP App"
+    }
+}
+
+resource "aws_subnet" "public_subnet_http_meta" {
+    vpc_id = "${aws_vpc.default.id}"
+
+    cidr_block = "${var.public_http_meta_subnet_cidr}"
+    availability_zone = "${var.availability_zone}"
+
+    tags {
+        Name = "Public Subnet HTTP Meta"
     }
 }
 
@@ -36,15 +47,35 @@ resource "aws_subnet" "public_subnet_ssh" {
 }
 
 /*
-  Private Subnet
+  Private Subnets
 */
-resource "aws_subnet" "private_subnet" {
+resource "aws_subnet" "private_app_subnet" {
     vpc_id = "${aws_vpc.default.id}"
 
-    cidr_block = "${var.private_subnet_cidr}"
+    cidr_block = "${var.private_app_subnet_cidr}"
     availability_zone = "${var.availability_zone}"
 
     tags {
-        Name = "Private Subnet"
+        Name = "Private Subnet for App servers"
+    }
+}
+resource "aws_subnet" "private_rds_subnet" {
+    vpc_id = "${aws_vpc.default.id}"
+
+    cidr_block = "${var.private_rds_subnet_cidr}"
+    availability_zone = "${var.availability_zone}"
+
+    tags {
+        Name = "Private Subnet for db instances"
+    }
+}
+resource "aws_subnet" "private_meta_subnet" {
+    vpc_id = "${aws_vpc.default.id}"
+
+    cidr_block = "${var.private_meta_rds_subnet_cidr}"
+    availability_zone = "${var.availability_zone}"
+
+    tags {
+        Name = "Private Subnet for meta dbs"
     }
 }

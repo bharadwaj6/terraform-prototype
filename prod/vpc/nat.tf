@@ -3,7 +3,7 @@ resource "aws_instance" "nat" {
     availability_zone = "${var.availability_zone}"
     instance_type = "${var.instance_type}"
     vpc_security_group_ids = ["${aws_security_group.nat.id}"]
-    subnet_id = "${aws_subnet.public_subnet_http.id}"
+    subnet_id = "${aws_subnet.public_subnet_http_app.id}"
     associate_public_ip_address = true
     source_dest_check = false
 
@@ -24,19 +24,19 @@ resource "aws_security_group" "nat" {
         from_port = 80
         to_port = 80
         protocol = "tcp"
-        cidr_blocks = ["${var.private_subnet_cidr}"]
+        cidr_blocks = ["${var.private_app_subnet_cidr}"]
     }
     ingress {
         from_port = 443
         to_port = 443
         protocol = "tcp"
-        cidr_blocks = ["${var.private_subnet_cidr}"]
+        cidr_blocks = ["${var.private_app_subnet_cidr}"]
     }
     ingress {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = ["${var.public_ssh_subnet_cidr}"]
     }
     ingress {
         from_port = -1
@@ -61,7 +61,7 @@ resource "aws_security_group" "nat" {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["${var.vpc_cidr}"]
+        cidr_blocks = ["${var.public_ssh_subnet_cidr}"]
     }
 
     vpc_id = "${aws_vpc.default.id}"
