@@ -13,22 +13,22 @@ resource "aws_internet_gateway" "default" {
 /*
   Public Subnet
 */
-resource "aws_subnet" "ap-south-1a-public_http" {
+resource "aws_subnet" "public_subnet_http" {
     vpc_id = "${aws_vpc.default.id}"
 
     cidr_block = "${var.public_http_subnet_cidr}"
-    availability_zone = "ap-south-1a"
+    availability_zone = "${var.availability_zone}"
 
     tags {
         Name = "Public Subnet HTTP"
     }
 }
 
-resource "aws_subnet" "ap-south-1a-public_ssh" {
+resource "aws_subnet" "public_subnet_ssh" {
     vpc_id = "${aws_vpc.default.id}"
 
     cidr_block = "${var.public_ssh_subnet_cidr}"
-    availability_zone = "ap-south-1a"
+    availability_zone = "${var.availability_zone}"
 
     tags {
         Name = "Public Subnet SSH"
@@ -38,11 +38,11 @@ resource "aws_subnet" "ap-south-1a-public_ssh" {
 /*
   Private Subnet
 */
-resource "aws_subnet" "ap-south-1a-private" {
+resource "aws_subnet" "private_subnet" {
     vpc_id = "${aws_vpc.default.id}"
 
     cidr_block = "${var.private_subnet_cidr}"
-    availability_zone = "ap-south-1a"
+    availability_zone = "${var.availability_zone}"
 
     tags {
         Name = "Private Subnet"

@@ -1,9 +1,9 @@
 resource "aws_instance" "nat" {
-    ami = "${var.nat_amis["ap-south-1"]}"
-    availability_zone = "ap-south-1a"
-    instance_type = "t2.micro"
+    ami = "${var.nat_amis["${var.region}"]}"
+    availability_zone = "${var.availability_zone}"
+    instance_type = "${var.instance_type}"
     vpc_security_group_ids = ["${aws_security_group.nat.id}"]
-    subnet_id = "${aws_subnet.ap-south-1a-public_http.id}"
+    subnet_id = "${aws_subnet.public_subnet_http.id}"
     associate_public_ip_address = true
     source_dest_check = false
 

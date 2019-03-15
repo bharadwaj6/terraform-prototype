@@ -2,7 +2,7 @@
   Public Subnet
 */
 
-resource "aws_route_table" "ap-south-1a-public_ssh" {
+resource "aws_route_table" "public_subnet_ssh" {
     vpc_id = "${aws_vpc.default.id}"
 
     route {
@@ -15,7 +15,7 @@ resource "aws_route_table" "ap-south-1a-public_ssh" {
     }
 }
 
-resource "aws_route_table" "ap-south-1a-public_http" {
+resource "aws_route_table" "public_subnet_http" {
     vpc_id = "${aws_vpc.default.id}"
 
     route {
@@ -28,21 +28,21 @@ resource "aws_route_table" "ap-south-1a-public_http" {
     }
 }
 
-resource "aws_route_table_association" "ap-south-1a-public_http" {
-    subnet_id = "${aws_subnet.ap-south-1a-public_http.id}"
-    route_table_id = "${aws_route_table.ap-south-1a-public_http.id}"
+resource "aws_route_table_association" "public_subnet_http" {
+    subnet_id = "${aws_subnet.public_subnet_http.id}"
+    route_table_id = "${aws_route_table.public_subnet_http.id}"
 }
 
-resource "aws_route_table_association" "ap-south-1a-public_ssh" {
-    subnet_id = "${aws_subnet.ap-south-1a-public_ssh.id}"
-    route_table_id = "${aws_route_table.ap-south-1a-public_ssh.id}"
+resource "aws_route_table_association" "public_subnet_ssh" {
+    subnet_id = "${aws_subnet.public_subnet_ssh.id}"
+    route_table_id = "${aws_route_table.public_subnet_ssh.id}"
 }
 
 /*
   Private Subnet
 */
 
-resource "aws_route_table" "ap-south-1a-private" {
+resource "aws_route_table" "private_subnet" {
     vpc_id = "${aws_vpc.default.id}"
 
     route {
@@ -55,7 +55,7 @@ resource "aws_route_table" "ap-south-1a-private" {
     }
 }
 
-resource "aws_route_table_association" "ap-south-1a-private" {
-    subnet_id = "${aws_subnet.ap-south-1a-private.id}"
-    route_table_id = "${aws_route_table.ap-south-1a-private.id}"
+resource "aws_route_table_association" "private_subnet" {
+    subnet_id = "${aws_subnet.private_subnet.id}"
+    route_table_id = "${aws_route_table.private_subnet.id}"
 }
