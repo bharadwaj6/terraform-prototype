@@ -6,7 +6,7 @@ variable "instance_type" {}
 
 variable "public_ssh_subnet_id" {}
 
-variable "public_subnet_ssh_sg_id" {}
+variable "vetted_citizen_sg_id" {}
 
 
 variable "bastion_amis" {

@@ -1,6 +1,6 @@
-/* 
-  Private subnets
-*/
+// https://docs.aws.amazon.com/vpc/latest/userguide/vpc-recommended-nacl-rules.html#nacl-rules-scenario-2
+
+//Private subnets
 
 resource "aws_network_acl" "private_subnet_rds_acl" {
   vpc_id = "${aws_vpc.default.id}"
@@ -13,15 +13,6 @@ resource "aws_network_acl" "private_subnet_rds_acl" {
     cidr_block = "${var.public_http_app_subnet_cidr}"
     from_port = 5432
     to_port = 5432
-  }
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 120
-    action     = "allow"
-    cidr_block = "${var.public_http_app_subnet_cidr}"
-    from_port = 32768
-    to_port = 65535
   }
 
   tags = {
@@ -42,15 +33,6 @@ resource "aws_network_acl" "private_subnet_meta_acl" {
     to_port = 5432
   }
 
-  egress {
-    protocol   = "tcp"
-    rule_no    = 120
-    action     = "allow"
-    cidr_block = "${var.public_http_meta_subnet_cidr}"
-    from_port = 32768
-    to_port = 65535
-  }
-
   tags = {
     Name = "private_subnet_meta_acl"
   }
@@ -69,31 +51,13 @@ resource "aws_network_acl" "private_subnet_app_acl" {
     to_port = 443
   }
 
-  egress {
+  egress { // for integrations
     protocol   = "tcp"
     rule_no    = 110
     action     = "allow"
     cidr_block = "${var.private_app_subnet_cidr}"
     from_port = 443
     to_port = 443
-  }
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 120
-    action     = "allow"
-    cidr_block = "${var.private_app_subnet_cidr}"
-    from_port = 32768
-    to_port = 65535
-  }
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 190
-    action     = "allow"
-    cidr_block = "${var.private_app_subnet_cidr}"
-    from_port = 6379
-    to_port = 6379
   }
 
   egress {
@@ -110,9 +74,7 @@ resource "aws_network_acl" "private_subnet_app_acl" {
   }
 }
 
-/* 
-  Public subnets
-*/
+// Public subnets
 
 resource "aws_network_acl" "public_subnet_ssh_acl" {
   vpc_id = "${aws_vpc.default.id}"
@@ -161,15 +123,6 @@ resource "aws_network_acl" "public_subnet_http_app_acl" {
     cidr_block = "${var.private_app_subnet_cidr}"
     from_port = 443
     to_port = 443
-  }
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 140
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 1024
-    to_port = 65535
   }
 
   tags = {

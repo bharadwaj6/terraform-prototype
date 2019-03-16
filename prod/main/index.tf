@@ -13,5 +13,5 @@ module "ec2" {
   region = "${var.region}"
   instance_type = "${var.instance_type}"
   public_ssh_subnet_id = "${module.vpc.public_ssh_subnet_id}"
-  public_subnet_ssh_sg_id = "${module.vpc.public_subnet_ssh_sg_id}"
+  vetted_citizen_sg_id = "${module.vpc.vetted_citizen_sg_id}"
 }

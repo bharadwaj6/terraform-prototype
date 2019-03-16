@@ -2,28 +2,27 @@ resource "aws_security_group" "private_subnet_app_sg" {
     name = "private_subnet_app_sg"
     description = "Allow incoming server connections."
 
-    ingress { // app server
+    ingress {
         from_port = 443
         to_port = 443
         protocol = "tcp"
         cidr_blocks = ["${var.public_http_app_subnet_cidr}"]
-        security_groups = ["${aws_security_group.webcitizen.id}"]
-    }
-
-    ingress { // Elasticache cluster
-        from_port = 6379
-        to_port = 6379
-        protocol = "tcp"
-        cidr_blocks = ["${var.private_app_subnet_cidr}"]
         security_groups = ["${aws_security_group.appcitizen.id}"]
     }
 
-    ingress { // bastion
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = ["${var.public_ssh_subnet_cidr}"]
-        security_groups = ["${aws_security_group.vettedcitizen.id}"]
+    egress { // for outgoing integrations
+        from_port = 443
+        to_port = 443
+        protocol   = "tcp"
+        security_groups = ["${aws_security_group.appcitizen.id}"]
+    }
+
+    egress {
+        from_port = 5432
+        to_port = 5432
+        protocol   = "tcp"
+        cidr_blocks = ["${var.private_rds_subnet_cidr}"]
+        security_groups = ["${aws_security_group.appcitizen.id}"]
     }
 
     ingress {
@@ -39,16 +38,18 @@ resource "aws_security_group" "private_subnet_app_sg" {
         Name = "Private subnet App servers SG"
     }
 }
+
+
 resource "aws_security_group" "private_subnet_rds_sg" {
     name = "private_subnet_rds_sg"
     description = "Allow incoming database connections."
 
-    ingress { // postgres
+    ingress {
         from_port = 5432
         to_port = 5432
         protocol = "tcp"
-        cidr_blocks = ["${var.public_http_app_subnet_cidr}"]
-        security_groups = ["${aws_security_group.dbcitizen.id}"]
+        cidr_blocks = ["${var.private_app_subnet_cidr}"]
+        security_groups = ["${aws_security_group.appcitizen.id}"]
     }
 
     ingress {
@@ -56,13 +57,6 @@ resource "aws_security_group" "private_subnet_rds_sg" {
         to_port = -1
         protocol = "icmp"
         cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    egress { // postgres - not sure if this is needed for replication?
-        from_port = 5432
-        to_port = 5432
-        protocol = "tcp"
-        security_groups = ["${aws_security_group.dbcitizen.id}"]
     }
 
     vpc_id = "${aws_vpc.default.id}"
@@ -71,6 +65,8 @@ resource "aws_security_group" "private_subnet_rds_sg" {
         Name = "Private subnet db SG"
     }
 }
+
+
 resource "aws_security_group" "private_subnet_meta_sg" {
     name = "private_subnet_meta_sg"
     description = "Allow incoming meta server connections."
@@ -79,7 +75,7 @@ resource "aws_security_group" "private_subnet_meta_sg" {
         from_port = 5432
         to_port = 5432
         protocol = "tcp"
-        cidr_blocks = ["${var.public_http_app_subnet_cidr}"]
+        cidr_blocks = ["${var.public_http_meta_subnet_cidr}"]
         security_groups = ["${aws_security_group.metacitizen.id}"]
     }
 
@@ -88,13 +84,6 @@ resource "aws_security_group" "private_subnet_meta_sg" {
         to_port = -1
         protocol = "icmp"
         cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    egress {
-        from_port = 5432
-        to_port = 5432
-        protocol = "tcp"
-        security_groups = ["${aws_security_group.metacitizen.id}"]
     }
 
     vpc_id = "${aws_vpc.default.id}"
@@ -134,6 +123,7 @@ resource "aws_security_group" "public_subnet_http_app_sg" {
         from_port = 443
         to_port = 443
         protocol = "tcp"
+        cidr_blocks = ["${var.private_app_subnet_cidr}"]
         security_groups = ["${aws_security_group.webcitizen.id}"]
     }
 
@@ -143,6 +133,7 @@ resource "aws_security_group" "public_subnet_http_app_sg" {
         Name = "Public subnet HTTP app SG"
     }
 }
+
 resource "aws_security_group" "public_subnet_http_meta_sg" {
     name = "public_subnet_http_meta_sg"
     description = "Allow incoming meta connections."
@@ -150,13 +141,6 @@ resource "aws_security_group" "public_subnet_http_meta_sg" {
     ingress {
         from_port = 443
         to_port = 443
-        protocol = "tcp"
-        security_groups = ["${aws_security_group.metacitizen.id}"]
-    }
-
-    ingress {
-        from_port = 3000
-        to_port = 3000
         protocol = "tcp"
         security_groups = ["${aws_security_group.metacitizen.id}"]
     }
@@ -172,6 +156,7 @@ resource "aws_security_group" "public_subnet_http_meta_sg" {
         from_port = 5432
         to_port = 5432
         protocol = "tcp"
+        cidr_blocks = ["${var.private_meta_rds_subnet_cidr}"]
         security_groups = ["${aws_security_group.metacitizen.id}"]
     }
 
@@ -191,7 +176,9 @@ resource "aws_security_group" "public_subnet_ssh_sg" {
         to_port = 22
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
+        security_groups = ["${aws_security_group.vettedcitizen.id}"]
     }
+
     ingress {
         from_port = -1
         to_port = -1
@@ -203,8 +190,10 @@ resource "aws_security_group" "public_subnet_ssh_sg" {
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = ["${var.vpc_cidr}"]
+        security_groups = ["${aws_security_group.vettedcitizen.id}"]
     }
+
     egress {
         from_port = -1
         to_port = -1
