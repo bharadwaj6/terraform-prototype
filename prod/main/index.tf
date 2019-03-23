@@ -14,4 +14,8 @@ module "ec2" {
   instance_type = "${var.instance_type}"
   public_ssh_subnet_id = "${module.vpc.public_ssh_subnet_id}"
   vetted_citizen_sg_id = "${module.vpc.vetted_citizen_sg_id}"
+  app_citizen_sg_id =  "${module.vpc.app_citizen_sg_id}"
+  meta_citizen_sg_id = "${module.vpc.meta_citizen_sg_id}"
+  private_app_subnet_id = "${module.vpc.private_app_subnet_id}"
+  public_http_meta_subnet_id = "${module.vpc.public_http_meta_subnet_id}"
 }

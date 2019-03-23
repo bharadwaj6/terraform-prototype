@@ -36,3 +36,11 @@ output "public_subnet_meta_sg_id" {
 output "vetted_citizen_sg_id" {
   value = "${aws_security_group.vettedcitizen.id}"
 }
+
+output "app_citizen_sg_id" {
+  value = "${aws_security_group.appcitizen.id}"
+}
+
+output "meta_citizen_sg_id" {
+  value = "${aws_security_group.metacitizen.id}"
+}
