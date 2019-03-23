@@ -10,12 +10,15 @@ variable "private_app_subnet_id" {}
 
 variable "public_http_meta_subnet_id" {}
 
+variable "public_http_app_subnet_id" {}
+
 variable "vetted_citizen_sg_id" {}
 
 variable "meta_citizen_sg_id" {}
 
 variable "app_citizen_sg_id" {}
 
+variable "web_citizen_sg_id" {}
 
 variable "bastion_amis" {
   type = "map"
