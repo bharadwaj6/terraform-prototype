@@ -6,6 +6,9 @@ variable "availability_zone" {}
 
 variable "instance_type" {}
 
+variable "node_type" {}
+
+
 
 provider "aws" {
   access_key = "${var.access_name}"

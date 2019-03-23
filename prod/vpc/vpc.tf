@@ -59,6 +59,13 @@ resource "aws_subnet" "private_app_subnet" {
         Name = "Private Subnet for App servers"
     }
 }
+
+resource "aws_elasticache_subnet_group" "private_app_subnet" {
+  name = "app-cache-subnet"
+  subnet_ids = ["${aws_subnet.private_app_subnet.id}"]
+}
+
+
 resource "aws_subnet" "private_rds_subnet" {
     vpc_id = "${aws_vpc.default.id}"
 

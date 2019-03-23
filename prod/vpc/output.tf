@@ -44,3 +44,7 @@ output "app_citizen_sg_id" {
 output "meta_citizen_sg_id" {
   value = "${aws_security_group.metacitizen.id}"
 }
+
+output "cache_subnet_group_name" {
+  value = "${aws_elasticache_subnet_group.private_app_subnet.name}"
+}

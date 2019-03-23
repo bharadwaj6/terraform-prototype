@@ -19,3 +19,10 @@ module "ec2" {
   private_app_subnet_id = "${module.vpc.private_app_subnet_id}"
   public_http_meta_subnet_id = "${module.vpc.public_http_meta_subnet_id}"
 }
+
+module "elasticache" {
+  source = "../elasticache"
+
+  node_type = "${var.node_type}"
+  subnet_group_name = "${module.vpc.cache_subnet_group_name}"
+}
