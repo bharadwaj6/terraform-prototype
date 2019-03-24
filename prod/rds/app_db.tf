@@ -12,6 +12,8 @@ resource "aws_db_instance" "app-db" {
   password             = "${var.db_password}"
   parameter_group_name = "default.postgres9.6"
   db_subnet_group_name = "${aws_db_subnet_group.app-db.id}"
+
+  skip_final_snapshot = true
 }
 
 resource "aws_db_subnet_group" "app-db" {
