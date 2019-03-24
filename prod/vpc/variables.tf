@@ -1,5 +1,7 @@
 variable "availability_zone" {}
 
+variable "availability_zone2" {}
+
 variable "instance_type" {}
 
 variable "region" {}
@@ -25,9 +27,14 @@ variable "public_http_app_subnet_cidr" {
     default = "10.0.64.0/18"
 }
 
-variable "private_rds_subnet_cidr" {
-    description = "CIDR for the Private Subnet for app db servers"
-    default = "10.0.128.0/19"
+variable "private_rds_subnet1_cidr" {
+    description = "CIDR for the Private Subnet 1 for app db servers"
+    default = "10.0.128.0/20"
+}
+
+variable "private_rds_subnet2_cidr" {
+    description = "CIDR for the Private Subnet 2 for app db servers"
+    default = "10.0.144.0/20"
 }
 
 variable "private_meta_rds_subnet_cidr" {

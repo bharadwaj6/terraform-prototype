@@ -2,6 +2,7 @@ module "vpc" {
   source = "../vpc"
   
   availability_zone = "${var.availability_zone}"
+  availability_zone2 = "${var.availability_zone2}"
   region = "${var.region}"
   instance_type = "${var.instance_type}"
 }
@@ -27,4 +28,15 @@ module "elasticache" {
 
   node_type = "${var.node_type}"
   subnet_group_name = "${module.vpc.cache_subnet_group_name}"
+}
+
+module "rds" {
+  source = "../rds"
+
+  db_instance_type = "${var.db_instance_type}"
+  db_name = "${var.db_name}"
+  db_username = "${var.db_username}"
+  db_password = "${var.db_password}"
+  private_rds_subnet1_id = "${module.vpc.private_rds_subnet1_id}"
+  private_rds_subnet2_id = "${module.vpc.private_rds_subnet2_id}"
 }

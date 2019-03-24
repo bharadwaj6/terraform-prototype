@@ -66,16 +66,28 @@ resource "aws_elasticache_subnet_group" "private_app_subnet" {
 }
 
 
-resource "aws_subnet" "private_rds_subnet" {
+resource "aws_subnet" "private_rds_subnet1" {
     vpc_id = "${aws_vpc.default.id}"
 
-    cidr_block = "${var.private_rds_subnet_cidr}"
+    cidr_block = "${var.private_rds_subnet1_cidr}"
     availability_zone = "${var.availability_zone}"
 
     tags {
         Name = "Private Subnet for db instances"
     }
 }
+
+resource "aws_subnet" "private_rds_subnet2" {
+    vpc_id = "${aws_vpc.default.id}"
+
+    cidr_block = "${var.private_rds_subnet2_cidr}"
+    availability_zone = "${var.availability_zone2}"
+
+    tags {
+        Name = "Private Subnet for db instances"
+    }
+}
+
 resource "aws_subnet" "private_meta_subnet" {
     vpc_id = "${aws_vpc.default.id}"
 

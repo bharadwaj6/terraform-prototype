@@ -2,9 +2,9 @@
 
 //Private subnets
 
-resource "aws_network_acl" "private_subnet_rds_acl" {
+resource "aws_network_acl" "private_subnet1_rds_acl" {
   vpc_id = "${aws_vpc.default.id}"
-  subnet_ids = ["${aws_subnet.private_rds_subnet.id}"]
+  subnet_ids = ["${aws_subnet.private_rds_subnet1.id}"]
 
   ingress {
     protocol   = "tcp"
@@ -16,7 +16,25 @@ resource "aws_network_acl" "private_subnet_rds_acl" {
   }
 
   tags = {
-    Name = "private_subnet_rds_acl"
+    Name = "private_subnet1_rds_acl"
+  }
+}
+
+resource "aws_network_acl" "private_subnet2_rds_acl" {
+  vpc_id = "${aws_vpc.default.id}"
+  subnet_ids = ["${aws_subnet.private_rds_subnet2.id}"]
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "${var.public_http_app_subnet_cidr}"
+    from_port = 5432
+    to_port = 5432
+  }
+
+  tags = {
+    Name = "private_subnet2_rds_acl"
   }
 }
 
@@ -64,7 +82,16 @@ resource "aws_network_acl" "private_subnet_app_acl" {
     protocol   = "tcp"
     rule_no    = 200
     action     = "allow"
-    cidr_block = "${var.private_rds_subnet_cidr}"
+    cidr_block = "${var.private_rds_subnet1_cidr}"
+    from_port = 5432
+    to_port = 5432
+  }
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 210
+    action     = "allow"
+    cidr_block = "${var.private_rds_subnet2_cidr}"
     from_port = 5432
     to_port = 5432
   }

@@ -21,7 +21,7 @@ resource "aws_security_group" "private_subnet_app_sg" {
         from_port = 5432
         to_port = 5432
         protocol   = "tcp"
-        cidr_blocks = ["${var.private_rds_subnet_cidr}"]
+        cidr_blocks = ["${var.private_rds_subnet1_cidr}", "${var.private_rds_subnet2_cidr}"]
         security_groups = ["${aws_security_group.appcitizen.id}"]
     }
 
@@ -40,8 +40,8 @@ resource "aws_security_group" "private_subnet_app_sg" {
 }
 
 
-resource "aws_security_group" "private_subnet_rds_sg" {
-    name = "private_subnet_rds_sg"
+resource "aws_security_group" "private_subnet1_rds_sg" {
+    name = "private_subnet1_rds_sg"
     description = "Allow incoming database connections."
 
     ingress {
@@ -62,7 +62,33 @@ resource "aws_security_group" "private_subnet_rds_sg" {
     vpc_id = "${aws_vpc.default.id}"
 
     tags {
-        Name = "Private subnet db SG"
+        Name = "Private subnet 1 db SG"
+    }
+}
+
+resource "aws_security_group" "private_subnet2_rds_sg" {
+    name = "private_subnet2_rds_sg"
+    description = "Allow incoming database connections."
+
+    ingress {
+        from_port = 5432
+        to_port = 5432
+        protocol = "tcp"
+        cidr_blocks = ["${var.private_app_subnet_cidr}"]
+        security_groups = ["${aws_security_group.appcitizen.id}"]
+    }
+
+    ingress {
+        from_port = -1
+        to_port = -1
+        protocol = "icmp"
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    vpc_id = "${aws_vpc.default.id}"
+
+    tags {
+        Name = "Private subnet 2 db SG"
     }
 }
 

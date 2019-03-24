@@ -86,7 +86,7 @@ resource "aws_route_table" "private_app_subnet" {
     }
 }
 
-resource "aws_route_table" "private_rds_subnet" {
+resource "aws_route_table" "private_rds_subnet1" {
     vpc_id = "${aws_vpc.default.id}"
 
     route {
@@ -95,13 +95,30 @@ resource "aws_route_table" "private_rds_subnet" {
     }
 
     tags {
-        Name = "Private Subnet for app dbs"
+        Name = "Private Subnet 1 for app dbs"
+    }
+}
+resource "aws_route_table" "private_rds_subnet2" {
+    vpc_id = "${aws_vpc.default.id}"
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        instance_id = "${aws_instance.nat.id}"
+    }
+
+    tags {
+        Name = "Private Subnet 2 for app dbs"
     }
 }
 
-resource "aws_route_table_association" "private_rds_subnet" {
-    subnet_id = "${aws_subnet.private_rds_subnet.id}"
-    route_table_id = "${aws_route_table.private_rds_subnet.id}"
+resource "aws_route_table_association" "private_rds_subnet1" {
+    subnet_id = "${aws_subnet.private_rds_subnet1.id}"
+    route_table_id = "${aws_route_table.private_rds_subnet1.id}"
+}
+
+resource "aws_route_table_association" "private_rds_subnet2" {
+    subnet_id = "${aws_subnet.private_rds_subnet2.id}"
+    route_table_id = "${aws_route_table.private_rds_subnet2.id}"
 }
 
 resource "aws_route_table_association" "private_app_subnet" {
